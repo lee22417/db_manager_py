@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os, json
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +22,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '%!mr7^k3z5*%pzkik&g@1wqv3_b!4h739kg$#=#^&0pq6z8_uv'
+django_file = os.path.join(BASE_DIR, 'secret_keys/django_key.json')
+with open(django_file) as f:
+    key_info = json.loads(f.read())
+def get_django_key(param, key_info = key_info):
+    try: 
+        return key_info[param]
+    except KeyError:
+        error_msg = "Set the {} environment variable".format(param)
+        raise ImproperlyConfigured(error_msg)
+
+SECRET_KEY = get_django_key("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -73,15 +85,23 @@ WSGI_APPLICATION = 'db_manager_py.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
+db_config = os.path.join(BASE_DIR, 'secret_keys/db_config.json')
+with open(db_config) as f:
+    config = json.loads(f.read())
+def get_django_key(param, config = config):
+    try: 
+        return config[param]
+    except KeyError:
+        error_msg = "Set the {} environment variable".format(param)
+        raise ImproperlyConfigured(error_msg)
+DB_USER = get_django_key("USER")
+DB_PASSWORD = get_django_key("PASSWORD")
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
         'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
         'NAME' : 'db_manager',
-        'USER' : 'root',
-        'PASSWORD' : 'not4u',
+        'USER' : DB_USER,
+        'PASSWORD' : DB_PASSWORD,
         'HOST' : 'localhost',
         'PORT' : '3306'
     }
