@@ -11,8 +11,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
-import os, json
+import os, json, time
 from django.core.exceptions import ImproperlyConfigured
+from datetime import datetime, timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -146,8 +147,35 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Pagination
+# REST API setting
 REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES':(
+        'rest_framework.permissions.IsAuthenticated'
+    ),        
+    'DEFAULT_AUTHENTICATION_CLASSES':(
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication'
+    ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
+}
+
+# JWT 
+jwt_key = os.path.join(BASE_DIR, 'secret_keys/jwt_key.json')
+with open(jwt_key) as f:
+    config = json.loads(f.read())
+def get_jwt_key(param, config = config):
+    try: 
+        return config[param]
+    except KeyError:
+        error_msg = "Set the {} environment variable".format(param)
+        raise ImproperlyConfigured(error_msg)
+JWT_SECRET_KEY = get_jwt_key("JWT_SECRET_KEY")
+JWT_AUTH = {
+    'JWT_SECRET_KEY' : JWT_SECRET_KEY,
+    'JWT_ALGORITHM' : 'HS256',
+    'JWT_ALLOW_REFRESH' : True,
+    'JWT_EXPIRATION_DELTA' : timedelta(days=7),
+    'JWT_REFRESH_EXPIRATION_DELTA' : timedelta(days=28)
 }
