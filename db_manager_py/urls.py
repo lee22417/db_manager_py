@@ -7,13 +7,9 @@ from usertest import views
 
 router = routers.DefaultRouter()
 
-# test 
-router.register(r'users', views.UserViewSet) 
-router.register(r'groups', views.GroupViewSet) 
-
 urlpatterns = [
     path('', include(router.urls)),
-    path('test/', include('usertest.urls')), # test API
+    path('pretest/', include('usertest.urls')), # pretest API
 
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
