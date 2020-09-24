@@ -3,8 +3,8 @@ from rest_framework.routers import DefaultRouter
 from . import views
 
 router = DefaultRouter()
-#router.register(r'a', views.TestViewSet)
 
 urlpatterns = [
-    path('', include (router.urls))
+    path('', include (router.urls)),
+    path('board', views.QuestionView.as_view()),
 ]
