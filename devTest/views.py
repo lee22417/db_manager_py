@@ -8,8 +8,16 @@ from rest_framework.renderers import JSONRenderer
 from .models import Question
 from .serializers import QuestionSerializer
 
-class QuestionView(generics.ListCreateAPIView):
-        queryset = Question.objects.all()
-        serializer_class = QuestionSerializer
-        permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
-        authentication_classes((JSONWebTokenAuthentication,))
+# GET, POST
+class QuestionList(generics.ListCreateAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    authentication_classes((JSONWebTokenAuthentication,))
+
+# PUT, DELETE
+class QuestionDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    authentication_classes((JSONWebTokenAuthentication,))
