@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework', # rest api
+    'corsheaders', # http cors
 
     'devTest.apps.DevtestConfig'
 ]
@@ -67,6 +68,13 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'db_manager_py.urls'
+
+CORS_ORIGIN_ALLOW_ALL = False
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000', # React
+    'http://localhost:8000', # Django
+)
 
 TEMPLATES = [
     {
