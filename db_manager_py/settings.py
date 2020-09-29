@@ -69,8 +69,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'db_manager_py.urls'
 
+CORS_ORIGIN_ALLOW_ALL = False
+
 CORS_ORIGIN_WHITELIST = (
-    'localhost:3000/'
+    'http://localhost:3000', # React
+    'http://localhost:8000', # Django
 )
 
 TEMPLATES = [
