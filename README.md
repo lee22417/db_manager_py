@@ -2,12 +2,10 @@
 ```
 with db-manager-react
 ```
-# Backend - RESTful API
-# 1.
+# Back End - RESTful API
 - Python3
 - Django
 - MariaDB
-# 2
 1. something 
   ```
   JWT
